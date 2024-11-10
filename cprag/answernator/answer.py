@@ -23,7 +23,7 @@ class Answernator:
         self._index = index
         self._llm = llm
 
-    async def answer(self, query: str):
+    async def answer(self, query: str) -> list[LLMAnswer]:
         found = await self._index.lookup(query)
 
         answers = []

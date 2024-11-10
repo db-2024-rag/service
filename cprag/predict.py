@@ -3,6 +3,9 @@ import sys
 from asyncio import new_event_loop
 from pathlib import Path
 
+import pandas as pd
+from tqdm import tqdm
+
 from cprag.answernator.answer import Answernator
 from cprag.file_processor.processor import FileProcessor
 from cprag.llm.llm import LLM
@@ -19,19 +22,29 @@ import sqlalchemy as sa
 
 async def main():
     settings = AppSettings()
+    settings.web_top_files = 1
+    settings.total_top = 10
 
     db = DbClient(settings.pg_dsn)
-    ocr = OcrReader(settings)
     llm = LLM(settings)
     vectorizer = Vectorizer(settings)
-    file_processor = FileProcessor(db, ocr, llm, vectorizer)
+    index = SearchIndex(settings, db, vectorizer)
+    answernator = Answernator(index, llm)
 
-    for file in Path(sys.argv[1]).iterdir():
-        async with db.session() as sess:
-            exists = await sess.scalar(sa.select(StoredFileOrm.id).where(StoredFileOrm.file_name == file.name))
-            if not exists:
-                print(f'Adding {file.name}')
-                await file_processor.new_file(file.name, file.read_bytes())
+    await db.connect()
+    await index.build()
+
+    df = pd.read_csv(sys.argv[1])
+    new_entries = []
+    for row in tqdm(df.itertuples()):
+        answer = await answernator.answer(row.question)
+        new_entries.append({
+            'question': row.question,
+            'filename': answer[0].file_name.split('.')[0],
+            'slide_number': answer[0].slides[0] if len(answer[0].slides) > 0 else 0,
+            'answer': answer[0].answer
+        })
+    pd.DataFrame(new_entries).to_csv('outputs.csv', index=None)
 
 
 if __name__ == '__main__':
