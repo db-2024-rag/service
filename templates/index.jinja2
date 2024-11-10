@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat with LLM</title>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo">Chat with LLM</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="chat-container">
+           
+            <div class="chat-window">
+                <div class="card">
+                    <div class="card-content chat-content" id="chat-window">
+                        <!-- Messages are here -->
+                    </div>
+                    <div class="card-action">
+                        <div class="row message-input-row">
+                            <div class="input-area col s12">
+                                <div class="input-field" style="flex: 1;">
+                                    <textarea id="message-input" placeholder="Type your message here..." class="materialize-textarea"></textarea>
+                                </div>
+                                <button id="send-button" class="btn waves-effect waves-light">
+                                    Send
+                                    <i class="material-icons right">send</i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <span class="card-title" style="color: #32325d;">Add File</span>
+                        <form id="upload-form" enctype="multipart/form-data">
+                            <div class="file-field input-field">
+                                <div class="btn">
+                                    <span>Choose File</span>
+                                    <input type="file" id="file-input" name="file" accept=".pdf,.txt">
+                                </div>
+                                <div class="file-path-wrapper">
+                                    <input class="file-path validate" type="text" placeholder="Upload PDF or TXT file">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn waves-effect waves-light">
+                                Upload
+                                <i class="material-icons right">file_upload</i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="history-container">
+                <div class="card history-card">
+                    <div class="card-content">
+                        <span class="card-title">History</span>
+                        <ul id="history-list" class="collection">
+                            <!-- History items are here -->
+                        </ul>
+                    </div>
+                    <button id="clear-history-button" class="btn waves-effect waves-light">
+                        Clear History
+                        <i class="material-icons right">delete</i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <script src="{{ url_for('static', path='script.js') }}"></script>
+</body>
+</html>
