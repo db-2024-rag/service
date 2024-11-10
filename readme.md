@@ -1,5 +1,5 @@
 # Запуск
-1. Установить в систему `pyenv`, `libmagic`, драйвера nvidia (нужна карта от rtx 3090), `docker-compose`.
+1. Установить в систему `pyenv`, `libmagic`, драйвера nvidia (нужна карта от rtx 3090), `docker-compose`, `poetry`.
 2. Установить питон: `pyenv install 3.11.4`
 3. Установить окружение: `poetry env use $(pyenv which python)`
 4. Установить пакеты: `poetry install`
