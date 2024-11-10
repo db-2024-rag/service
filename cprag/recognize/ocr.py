@@ -29,6 +29,8 @@ class OcrReader:
                 for page_num, page_image in enumerate(tqdm(pages)):
                     paragraphs[page_num + 1] = '\n'.join(self.recognize_text(page_image))
                 return paragraphs
+            case 'text/plain':
+                return {1: file_contents.decode('utf-8')}
             case _:
                 raise ValueError('Unsupported file format')
 
